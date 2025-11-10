@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "75291800404",
+    "project_id": "bookswap-879ad",
+    "storage_bucket": "bookswap-879ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75291800404:android:853c9fcb5cbb7eca510ec1",
+        "android_client_info": {
+          "package_name": "com.example.bookswap_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75291800404-7ifr7g09nlgjovti0pkjvt01419779hq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFIYkZjf7CZbijtHMyRLdLR5S47meKVGE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75291800404-7ifr7g09nlgjovti0pkjvt01419779hq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "75291800404-ccppmpdtgg317bc2ncon0837rjt9ug8h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "vmug"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

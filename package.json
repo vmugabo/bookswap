@@ -1,0 +1,10 @@
+{
+  "name": "bookswap-deploy-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:web": "flutter build web --release",
+    "deploy:firebase": "firebase deploy --only hosting,firestore,storage,functions",
+    "build-and-deploy": "npm run build:web && npm run deploy:firebase"
+  }
+}

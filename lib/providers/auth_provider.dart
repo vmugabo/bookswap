@@ -9,10 +9,24 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../services/firebase_service.dart';
 import '../models/user_profile.dart';
 
-final firebaseAuthProvider =
-    Provider<FirebaseAuth>((ref) => FirebaseService.auth);
-final authStateChangesProvider = StreamProvider<User?>(
-    (ref) => ref.watch(firebaseAuthProvider).authStateChanges());
+final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
+  if (!FirebaseService.initialized) {
+    // Fail fast when code tries to use FirebaseAuth before initialization.
+    // Upstream callers should use `FirebaseService.initialized` or
+    // `authStateChangesProvider` to guard UI paths during start-up.
+    throw StateError('Firebase has not been initialized');
+  }
+  return FirebaseService.auth;
+});
+
+/// Expose auth state changes. If Firebase hasn't been initialized yet (e.g.
+/// during local dev without FlutterFire config), expose a single `null` value
+/// so UI can run without crashing. This avoids calling `FirebaseAuth.instance`
+/// before `Firebase.initializeApp()` completed.
+final authStateChangesProvider = StreamProvider<User?>((ref) {
+  if (!FirebaseService.initialized) return Stream.value(null);
+  return ref.watch(firebaseAuthProvider).authStateChanges();
+});
 
 final authServiceProvider = Provider<AuthService>((ref) => AuthService(ref));
 
@@ -36,6 +50,7 @@ final userProfileProvider = StreamProvider.autoDispose<UserProfile?>((ref) {
 final userProfileByIdProvider =
     FutureProvider.family<UserProfile?, String>((ref, uid) async {
   if (uid.isEmpty) return null;
+  if (!FirebaseService.initialized) return null;
   final doc =
       await FirebaseService.firestore.collection('users').doc(uid).get();
   if (!doc.exists || doc.data() == null) return null;
@@ -45,7 +60,6 @@ final userProfileByIdProvider =
 class AuthService {
   final Ref _ref;
   AuthService(this._ref);
-
   FirebaseAuth get _auth => _ref.read(firebaseAuthProvider);
   FirebaseFirestore get _firestore => FirebaseService.firestore;
 
