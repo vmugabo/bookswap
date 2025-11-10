@@ -5,6 +5,7 @@ import '../models/book.dart';
 import '../providers/swap_provider.dart';
 import '../providers/listings_provider.dart';
 import '../services/firebase_service.dart';
+import '../utils/display_name.dart';
 import 'listing_form_screen.dart';
 
 class ListingDetailScreen extends ConsumerStatefulWidget {
@@ -105,15 +106,7 @@ class _ListingDetailScreenState extends ConsumerState<ListingDetailScreen> {
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
                             final data = snapshot.data?.data();
-                            if (data != null &&
-                                (data['displayName'] ?? '')
-                                    .toString()
-                                    .isNotEmpty) {
-                              ownerLabel = data['displayName'];
-                            } else if (data != null &&
-                                (data['email'] ?? '').toString().isNotEmpty) {
-                              ownerLabel = data['email'];
-                            }
+                            ownerLabel = resolveDisplayNameFromUserData(data);
                           }
                           return Text('Listed by: $ownerLabel',
                               style: TextStyle(

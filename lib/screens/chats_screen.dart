@@ -8,6 +8,7 @@ import 'auth/login_screen.dart';
 import '../providers/auth_provider.dart';
 import '../services/chat_service.dart';
 import 'chat_screen.dart';
+import '../utils/display_name.dart';
 
 class ChatsScreen extends ConsumerWidget {
   const ChatsScreen({Key? key}) : super(key: key);
@@ -48,12 +49,39 @@ class ChatsScreen extends ConsumerWidget {
             itemBuilder: (ctx, i) {
               final o = offers[i];
               return FutureBuilder(
-                future: ref.read(userProfileByIdProvider(o.fromUserId).future),
+                future: Future.wait([
+                  ref.read(userProfileByIdProvider(o.fromUserId).future),
+                  FirebaseService.firestore
+                      .collection('books')
+                      .doc(o.bookId)
+                      .get()
+                ]),
                 builder: (context, snap) {
-                  final profile = snap.data;
-                  final name = profile?.displayName ?? 'Unknown user';
+                  String name = 'Unknown user';
+                  String bookTitle = o.bookId;
+                  if (snap.connectionState == ConnectionState.done &&
+                      snap.hasData) {
+                    final list = snap.data as List<dynamic>;
+                    final profile = list[0];
+                    final bookDoc = list[1];
+                    name = resolveDisplayNameFromUserData(
+                        profile is Map<String, dynamic>
+                            ? profile
+                            : (profile?.toMap?.call() ?? profile));
+                    try {
+                      final bd = bookDoc as dynamic;
+                      final bdata = bd.data() as Map<String, dynamic>?;
+                      if (bdata != null &&
+                          (bdata['title'] ?? '').toString().isNotEmpty) {
+                        bookTitle = bdata['title'];
+                      }
+                    } catch (_) {
+                      // ignore and fallback to id
+                    }
+                  }
+
                   return ListTile(
-                    title: Text('Book: ${o.bookId}'),
+                    title: Text('Book: $bookTitle'),
                     subtitle: Text(
                         'From: $name — ${o.status.toString().split('.').last}'),
                     onTap: () async {

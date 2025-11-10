@@ -8,6 +8,7 @@ import 'listing_form_screen.dart';
 import '../providers/swap_provider.dart';
 import '../models/swap_offer.dart';
 import '../services/chat_service.dart';
+import '../utils/display_name.dart';
 import 'chat_screen.dart';
 
 class MyListingsScreen extends ConsumerWidget {
@@ -60,19 +61,10 @@ class MyListingsScreen extends ConsumerWidget {
                                 builder: (ctx2, userSnap) {
                                   String fromName = 'Unknown user';
                                   if (userSnap.hasData) {
-                                    final ud = (userSnap.data as dynamic).data()
-                                        as Map<String, dynamic>?;
-                                    if (ud != null &&
-                                        (ud['displayName'] ?? '')
-                                            .toString()
-                                            .isNotEmpty) {
-                                      fromName = ud['displayName'];
-                                    } else if (ud != null &&
-                                        (ud['email'] ?? '')
-                                            .toString()
-                                            .isNotEmpty) {
-                                      fromName = ud['email'];
-                                    }
+                                    final ud =
+                                        (userSnap.data as dynamic).data();
+                                    fromName =
+                                        resolveDisplayNameFromUserData(ud);
                                   }
 
                                   return ListTile(
