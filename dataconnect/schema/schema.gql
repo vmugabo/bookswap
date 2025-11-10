@@ -1,0 +1,52 @@
+type User @table {
+  displayName: String!
+  createdAt: Timestamp!
+  email: String
+  bio: String
+  photoUrl: String
+  location: String
+}
+
+type Book @table {
+  title: String!
+  author: String!
+  isbn: String!
+  description: String
+  genre: String
+  publicationYear: Int
+  coverImageUrl: String
+}
+
+type UserBook @table {
+  user: User!
+  book: Book!
+  condition: String!
+  status: String!
+  createdAt: Timestamp!
+  notes: String
+}
+
+type SwapRequest @table {
+  requestingUser: User!
+  requestedUser: User!
+  requestedBook: UserBook!
+  offeringBook: UserBook!
+  status: String!
+  createdAt: Timestamp!
+  message: String
+}
+
+type SwapRating @table {
+  swapRequest: SwapRequest!
+  ratingUser: User!
+  ratedUser: User!
+  rating: Int!
+  createdAt: Timestamp!
+  review: String
+}
+
+type Wishlist @table(key: ["user", "book"]) {
+  user: User!
+  book: Book!
+  createdAt: Timestamp!
+}

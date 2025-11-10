@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow public reads for cover images so they can be displayed in the app
+    match /book_covers/{allPaths=**} {
+      allow read: if true;
+
+      // Allow authenticated users to upload covers. Enforce a size limit
+      // and validate content type is an image.
+      allow write: if request.auth != null
+        && request.resource.size < 5 * 1024 * 1024 // < 5MB
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Profile pictures: allow public read, but only allow the user to
+    // write to their own profile path (profile_pics/{uid}/...)
+    match /profile_pics/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Deny all other writes by default; allow reads for other publicly
+    // served assets if you choose.
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

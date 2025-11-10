@@ -1,0 +1,47 @@
+mutation AddBookToWishlist($bookId: UUID!) @auth(level: USER) {
+  wishlist_insert(data: {
+    userId_expr: "auth.uid",
+    bookId: $bookId
+  })
+}
+
+query GetUserWishlist @auth(level: USER) {
+  wishlists(where: {userId_expr: "auth.uid"}) {
+    book {
+      id
+      title
+      author
+      coverImageUrl
+    }
+  }
+}
+
+mutation CreateSwapRequest(
+  $offeringBookId: UUID!
+  $requestedBookId: UUID!
+  $requestedUserId: UUID!
+  $message: String
+) @auth(level: USER) {
+  swapRequest_insert(data: {
+    requestingUserId_expr: "auth.uid",
+    offeringBookId: $offeringBookId,
+    requestedBookId: $requestedBookId,
+    requestedUserId: $requestedUserId,
+    message: $message,
+    status: "pending"
+  })
+}
+
+query GetUserAvailableBooks @auth(level: USER) {
+  userBooks(where: {userId_expr: "auth.uid", status: {eq: "available"}}) {
+    id
+    book {
+      id
+      title
+      author
+      coverImageUrl
+    }
+    condition
+    notes
+  }
+}

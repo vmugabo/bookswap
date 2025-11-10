@@ -1,0 +1,96 @@
+mutation CreateDemoData @transaction @auth(level: USER, insecureReason: "This operation is to seed data, it will only be run by approved users.") {
+  book_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      author: "Author1",
+      isbn: "1234567890",
+      title: "Book1"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      author: "Author2",
+      isbn: "0987654321",
+      title: "Book2"
+    }
+  ])
+  user_insertMany(data: [
+    {
+      id: "660e8400-e29b-41d4-a716-446655440000",
+      displayName: "User1",
+      createdAt: "2024-01-01T00:00:00Z"
+    },
+    {
+      id: "660e8400-e29b-41d4-a716-446655440001",
+      displayName: "User2",
+      createdAt: "2024-01-01T00:00:00Z"
+    }
+  ])
+  userBook_insertMany(data: [
+    {
+      id: "770e8400-e29b-41d4-a716-446655440000",
+      bookId: "550e8400-e29b-41d4-a716-446655440000",
+      userId: "660e8400-e29b-41d4-a716-446655440000",
+      condition: "Good",
+      status: "Available",
+      createdAt: "2024-01-01T00:00:00Z"
+    },
+    {
+      id: "770e8400-e29b-41d4-a716-446655440001",
+      bookId: "550e8400-e29b-41d4-a716-446655440001",
+      userId: "660e8400-e29b-41d4-a716-446655440001",
+      condition: "Good",
+      status: "Available",
+      createdAt: "2024-01-01T00:00:00Z"
+    }
+  ])
+  wishlist_insertMany(data: [
+    {
+      bookId: "550e8400-e29b-41d4-a716-446655440000",
+      userId: "660e8400-e29b-41d4-a716-446655440000",
+      createdAt: "2024-01-01T00:00:00Z"
+    },
+    {
+      bookId: "550e8400-e29b-41d4-a716-446655440001",
+      userId: "660e8400-e29b-41d4-a716-446655440001",
+      createdAt: "2024-01-01T00:00:00Z"
+    }
+  ])
+  swapRequest_insertMany(data: [
+    {
+      id: "880e8400-e29b-41d4-a716-446655440000",
+      offeringBookId: "770e8400-e29b-41d4-a716-446655440000",
+      requestedBookId: "770e8400-e29b-41d4-a716-446655440001",
+      requestedUserId: "660e8400-e29b-41d4-a716-446655440001",
+      requestingUserId: "660e8400-e29b-41d4-a716-446655440000",
+      status: "Pending",
+      createdAt: "2024-01-01T00:00:00Z"
+    },
+    {
+      id: "880e8400-e29b-41d4-a716-446655440001",
+      offeringBookId: "770e8400-e29b-41d4-a716-446655440001",
+      requestedBookId: "770e8400-e29b-41d4-a716-446655440000",
+      requestedUserId: "660e8400-e29b-41d4-a716-446655440000",
+      requestingUserId: "660e8400-e29b-41d4-a716-446655440001",
+      status: "Pending",
+      createdAt: "2024-01-01T00:00:00Z"
+    }
+  ])
+  swapRating_insertMany(data: [
+    {
+      id: "990e8400-e29b-41d4-a716-446655440000",
+      ratedUserId: "660e8400-e29b-41d4-a716-446655440001",
+      ratingUserId: "660e8400-e29b-41d4-a716-446655440000",
+      swapRequestId: "880e8400-e29b-41d4-a716-446655440000",
+      rating: 5,
+      createdAt: "2024-01-01T00:00:00Z"
+    },
+    {
+      id: "990e8400-e29b-41d4-a716-446655440001",
+      ratedUserId: "660e8400-e29b-41d4-a716-446655440000",
+      ratingUserId: "660e8400-e29b-41d4-a716-446655440001",
+      swapRequestId: "880e8400-e29b-41d4-a716-446655440001",
+      rating: 4,
+      createdAt: "2024-01-01T00:00:00Z"
+    }
+  ])
+}

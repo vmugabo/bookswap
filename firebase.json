@@ -1,0 +1,48 @@
+{
+	"flutter": {
+		"platforms": {
+			"dart": {
+				"lib/firebase_options.dart": {
+					"projectId": "bookswap-879ad",
+					"configurations": {
+						"web": "1:75291800404:web:3bed125bf6da27d3510ec1"
+					}
+				}
+			}
+		}
+	},
+	"firestore": {
+		"database": "(default)",
+		"location": "africa-south1",
+ 		"rules": "firestore.rules",
+		"indexes": "firestore.indexes.json"
+	},
+	"storage": {
+		"rules": "storage.rules"
+	},
+	"apphosting": {
+		"backendId": "bookswap-app",
+		"rootDir": "/",
+		"ignore": [
+			"node_modules",
+			".git",
+			"firebase-debug.log",
+			"firebase-debug.*.log",
+			"functions"
+		]
+	},
+	"hosting": {
+		"public": "build/web",
+		"ignore": [
+			"firebase.json",
+			"**/.*",
+			"**/node_modules/**"
+		],
+		"rewrites": [
+			{
+				"source": "**",
+				"destination": "/index.html"
+			}
+		]
+	}
+}
